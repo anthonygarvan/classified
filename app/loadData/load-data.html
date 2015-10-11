@@ -1,1 +1,21 @@
-<input type="file" id="data" onchange="parseCsv(this.files[0])">
+<div>
+<h2>Please upload a spreadsheet in comma-separated-values (CSV) format.</h2>
+<input type="file" id="file">
+<button ng-click="getData()">Read CSV</button>
+<div ng-show="metaData">
+<h2>Let me know if these columns are numbers, categories, text or targets.</h2>
+<table>
+<tr ng-repeat="col in metaData">
+<td>{{col.name}}</td>
+<td>
+<select ng-model="col.dataType">
+      <option value="">---Please select---</option> <!-- not selected / blank option -->
+      <option value="number">Number</option> <!-- interpolation -->
+      <option value="target">Target</option>
+</select>
+</td>
+</tr>
+</table>
+<button ng-click="logisticRegression()">Classify</button>
+</div>
+</div>
