@@ -6,7 +6,6 @@ angular.module('myApp', [
   'myApp.loadData',
   'myApp.setup',
   'myApp.version'
-]).
-config(['$routeProvider', function($routeProvider) {
+]).config(['$routeProvider', function($routeProvider) {
   $routeProvider.otherwise({redirectTo: '/load-data'});
 }]);

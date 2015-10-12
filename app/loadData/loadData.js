@@ -9,7 +9,8 @@ angular.module('myApp.loadData', ['ngRoute'])
   });
 }])
 
-.controller('LoadDataCtrl', ['$scope', function($scope) {
+.controller('LoadDataCtrl', ['$scope', 
+	function($scope) {
 
 $scope.readCsv = function() {
 		var file = document.getElementById('file').files[0]
@@ -39,37 +40,35 @@ $scope.getData = function() {
 			});	            
           }
         });
-      };
+};
 
 $scope.logisticRegression = function() {
-getPoints();
-var w = []
-for(var i=0; i < $scope.points[0].x.length; i++) {
-	w.push(Math.random());
-}
-/*
-for i in range(10):
-    gradient = points.map(
-        lambda p: (1 / (1 + exp(-p.y*(w.dot(p.x)))) - 1) * p.y * p.x
-    ).reduce(lambda a, b: a + b)
-    w -= gradient
-print "Final separating plane: %s" % w*/
-var grad;
-for(var i = 0; i < 10; i++) {
-	grad = $scope.points.map(function(p) {
-		return scalarMult(-p.y*(1 / (1 + Math.exp(-p.y*(dot(w, p.x)))) - 1), p.x)
-	}).reduce(function(a,b) {return a + b;})	
-	vectorSum(w, grad);
-}
+	getPoints();
+	var w = []
+	for(var i=0; i < $scope.points[0].x.length; i++) {
+		w.push(Math.random());
+	}
 
-var score = function(x) {
-	return Math.round(1/(1 + Math.exp(dot(w, x))));
-}
+	var grad;
+	for(var i = 0; i < 10; i++) {
+		grad = $scope.points.map(function(p) {
+			return scalarMult(-p.y*(1 / (1 + Math.exp(-p.y*(dot(w, p.x)))) - 1), p.x)
+		}).reduce(function(a,b) {return a + b;})	
+		vectorSum(w, grad);
+	}
 
-var scores = []
-$scope.points.forEach(function(p) {scores.push(score(p.x));})
+	var score = function(x) {
+		return Math.round(1/(1 + Math.exp(dot(w, x))));
+	}
 
-console.log(scores);
+	var y_pred = [];
+	var y_true = [];
+	$scope.points.forEach(function(p) {
+		y_pred.push(score(p.x));
+		y_true.push(p.y);
+	})
+
+	$scope.confusionMatrix = getConfusionMatrix(y_true, y_pred);
 }
 
 var getPoints = function() {
@@ -131,4 +130,18 @@ function shuffle(array) {
 
   return array;
 }
+
+function getConfusionMatrix(y_true, y_pred) {
+	var confusionMatrix = {tp: 0, tn: 0, fp: 0, fn: 0};
+
+	for(var i=0; i < y_true.length; i++) {
+		if(y_true[i] === 1 && y_pred[i] === 1) {confusionMatrix.tp++;}
+		if(y_true[i] === 0 && y_pred[i] === 0) {confusionMatrix.tn++;}
+		if(y_true[i] === 0 && y_pred[i] === 1) {confusionMatrix.fp++;}
+		if(y_true[i] === 1 && y_pred[i] === 0) {confusionMatrix.fn++;}
+	}
+
+	return confusionMatrix;
+}
+
 }]);
