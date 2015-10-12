@@ -1,0 +1,30 @@
+<div>
+<div ng-show="step==='loadData'">
+	<h3>Please upload a spreadsheet in comma-separated-values (CSV) format.</h3>
+	<input type="file" id="file">
+	<button ng-click="getData()">Next</button>
+</div>
+<div ng-show="step==='config'">
+	<h3>Let me know if these columns are numbers, categories, text or targets.</h3>
+	<table>
+		<tr ng-repeat="col in metaData">
+			<td><h4>{{col.name}}</h4></td>
+			<td>
+			<select ng-model="col.dataType">
+			      <option value="">---Please select---</option> <!-- not selected / blank option -->
+			      <option value="number">Number</option> <!-- interpolation -->
+			      <option value="target">Target</option>
+			</select>
+			</td>
+		</tr>
+	</table>
+	<button ng-click="logisticRegression()">Next</button>
+</div>
+<div ng-show="step==='results'">
+<h3>Your data has been classified! Here's a summary of the results:</h3>
+	<p>True Positive: {{confusionMatrix.tp}}</p>
+	<p>True Negative: {{confusionMatrix.tn}}</p>
+	<p>False Positive: {{confusionMatrix.fp}}</p>
+	<p>False Negative: {{confusionMatrix.fn}}</p>	
+</div>
+</div>

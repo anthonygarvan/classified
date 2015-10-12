@@ -1,16 +1,18 @@
 'use strict';
 
-angular.module('myApp.loadData', ['ngRoute'])
+angular.module('myApp.main', ['ngRoute'])
 
 .config(['$routeProvider', function($routeProvider) {
-  $routeProvider.when('/load-data', {
-    templateUrl: 'loadData/load-data.html',
-    controller: 'LoadDataCtrl'
+  $routeProvider.when('/main', {
+    templateUrl: 'main/main.html',
+    controller: 'MainDataCtrl'
   });
 }])
 
-.controller('LoadDataCtrl', ['$scope', 
+.controller('MainDataCtrl', ['$scope', 
 	function($scope) {
+
+$scope.step = 'loadData';
 
 $scope.readCsv = function() {
 		var file = document.getElementById('file').files[0]
@@ -28,7 +30,6 @@ $scope.getData = function() {
 		var file = document.getElementById('file').files[0]
         Papa.parse(file, {
           header: true,
-          //preview: 1,
           complete: function(results) {
 			var metaData = []
 			results.meta.fields.forEach(function(h) {
@@ -37,6 +38,7 @@ $scope.getData = function() {
 			$scope.$apply(function(){
 				$scope.metaData = metaData;
 				$scope.data = results.data;
+				$scope.step = 'config';
 			});	            
           }
         });
@@ -69,6 +71,7 @@ $scope.logisticRegression = function() {
 	})
 
 	$scope.confusionMatrix = getConfusionMatrix(y_true, y_pred);
+	$scope.step = 'results';
 }
 
 var getPoints = function() {
